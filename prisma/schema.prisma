@@ -1,0 +1,36 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Spaces {
+    id           Int           @id @default(autoincrement())
+    name         String
+    type         String
+    availability String
+    reservations Reservation[]
+}
+
+model Reservation {
+    id         Int      @id @default(autoincrement())
+    user_id    Int
+    space_id   Int
+    start_time DateTime
+    end_time   DateTime
+    status     String
+
+    user  User @relation(fields: [user_id], references: [id])
+    space Spaces  @relation(fields: [space_id], references: [id])
+}
+
+model User {
+    id            Int           @id @default(autoincrement())
+    name          String
+    email         String        @unique
+    calendar_sync Boolean       @default(false)
+    reservations  Reservation[]
+}
