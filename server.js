@@ -2,7 +2,6 @@
 import next from 'next';
 import { createServer } from 'http';
 import { Server as SocketServer } from 'socket.io';
-import prisma from './src/lib/prismaClient.js';
 
 
 // Definimos si estamos en modo desarrollo o producción
