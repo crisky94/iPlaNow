@@ -10,6 +10,7 @@ generator client {
 model Spaces {
     id           Int           @id @default(autoincrement())
     name         String
+    photo       String
     type         String
     availability String
     reservations Reservation[]
