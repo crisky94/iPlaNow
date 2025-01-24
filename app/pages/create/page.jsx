@@ -11,6 +11,7 @@ export default function CreateEventForm() {
     status: '',
     photo: null,
   });
+  const [preview, setPreview] = useState(null); // Estado para la vista previa de la foto
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,10 +22,14 @@ export default function CreateEventForm() {
   };
 
   const handleFileChange = (e) => {
-    setFormData({
-      ...formData,
-      photo: e.target.files[0],
-    });
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        photo: file,
+      });
+      setPreview(URL.createObjectURL(file)); // Genera la URL de vista previa
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -35,10 +40,11 @@ export default function CreateEventForm() {
     });
 
     try {
-      const response = await fetch('/api/events', {
+      const response = await fetch('http://localhost:8000/api/events', {
         method: 'POST',
         body: data,
       });
+      
 
       if (response.ok) {
         alert('Evento creado con éxito');
@@ -46,13 +52,12 @@ export default function CreateEventForm() {
           name: '',
           type: '',
           availability: '',
-          user_id: '',
-          space_id: '',
           start_time: '',
           end_time: '',
           status: '',
           photo: null,
         });
+        setPreview(null); // Limpiar la vista previa
       } else {
         alert('Error al crear el evento');
       }
@@ -63,9 +68,9 @@ export default function CreateEventForm() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-slate-800 pt-20 pb-20'>
+    <div className='min-h-screen flex items-center justify-center pt-20 pb-20'>
       <form
-        className="p-6 rounded-xl bg-black border border-[rgba(255,255,255,0.1)] bg-blend-normal shadow-md backdrop-blur-[27px] text-white max-w-3xl mx-auto"
+        className="p-4 rounded-xl bg-transparent border border-[rgba(255,255,255,0.1)] bg-blend-normal shadow-md backdrop-blur-[27px] text-white max-w-3xl mx-auto"
         onSubmit={handleSubmit}
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Crear Evento</h2>
@@ -73,44 +78,71 @@ export default function CreateEventForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             { label: 'Nombre del Espacio', name: 'name', type: 'text' },
-            { label: 'Tipo de Espacio', name: 'type', type: 'text' },
-            { label: 'Disponibilidad', name: 'availability', type: 'text' },,
-            { label: 'Estado', name: 'status', type: 'text' },
+            { label: 'Tipo de Espacio', name: 'type', type: 'select', options: ['Salón de Convenciones', 'Auditorio', 'Espacio al aire libre', 'Museo', 'Restaurante', 'Coworking'] },
+            { label: 'Disponibilidad', name: 'availability', type: 'select', options: ['Disponible', 'No disponible'] },
+            { label: 'Estado', name: 'status', type: 'select', options: ['Activo', 'Inactivo'] },
             { label: 'Hora de Inicio', name: 'start_time', type: 'datetime-local' },
             { label: 'Hora de Fin', name: 'end_time', type: 'datetime-local' },
           ].map((field) => (
             <label key={field.name} className="block">
               <span className="block text-white mb-2">{field.label}</span>
-              <input
-                type={field.type}
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleInputChange}
-                className="w-full p-2 rounded-md bg-white bg-opacity-10 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-white placeholder-gray-300"
-                required
-              />
+              {field.type === 'select' ? (
+                <select
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleInputChange}
+                  className="w-full p-1 rounded-md bg-white bg-opacity-10 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-white placeholder-gray-300"
+                  required
+                >
+                  <option value="">Selecciona {field.label.toLowerCase()}</option>
+                  {field.options.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type={field.type}
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleInputChange}
+                  className="w-full p-1 rounded-md bg-white bg-opacity-10 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-white placeholder-gray-300"
+                  required
+                />
+              )}
             </label>
           ))}
-
-          <label className="block sm:col-span-2">
-            <span className="block text-white mb-2">Foto</span>
-            <input
-              type="file"
-              name="photo"
-              onChange={handleFileChange}
-              className="w-full p-2 rounded-md bg-white bg-opacity-10 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-white"
-              accept="image/*"
-              required
-            />
-          </label>
         </div>
 
-        <button
-          type="submit"
-          className="w-full mt-6 py-2 px-4 bg-blue-500 rounded-md shadow-md hover:bg-blue-600 transition-colors duration-200"
-        >
-          Crear Evento
-        </button>
+        <div className="mt-4">
+          <label className="block text-white mb-2">Foto</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+          />
+          {preview && (
+            <div className="mt-4">
+              <p className="text-sm text-gray-400">Vista previa:</p>
+              <img
+                src={preview}
+                alt="Vista previa"
+                className="w-full max-h-48 object-contain rounded-md border border-gray-300 mt-2"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="flex w-full items-center justify-center mt-6">
+          <button
+            type="submit"
+            className="w-50 py-2 px-4 bg-blue-600 rounded-md shadow-md hover:bg-blue-500 transition-colors duration-200 text-sm"
+          >
+            Crear Evento
+          </button>
+        </div>
       </form>
     </div>
   );
