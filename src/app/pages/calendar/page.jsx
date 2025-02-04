@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+
 const Calendar = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [events, setEvents] = useState({}); // Store events by date
@@ -26,21 +27,11 @@ const Calendar = () => {
         setSelectedDate(dateKey);
     };
 
-    const handleAddEvent = (event) => {
-        event.preventDefault();
-        const eventTitle = event.target.elements.eventTitle.value;
-        if (!eventTitle) return;
+    const handleAddEvent = (e) => {
+        e.preventDefault();
 
-        setEvents((prev) => {
-            const updatedEvents = { ...prev };
-            if (!updatedEvents[selectedDate]) {
-                updatedEvents[selectedDate] = [];
-            }
-            updatedEvents[selectedDate].push(eventTitle);
-            return updatedEvents;
-        });
+        setEvents();
 
-        event.target.reset();
     };
 
     const handlePrevMonth = () => {
@@ -62,13 +53,13 @@ const Calendar = () => {
     };
 
     return (
-        <div className="flex flex-col items-center p-4">
+        <div className="flex flex-col items-center p-4 ">
             <h1 className="text-2xl font-bold mb-4">Calendar</h1>
 
-            <div className="flex justify-between items-center w-full max-w-md mb-4">
+            <div className="flex justify-between items-center w-full max-w-md mb-4 bg-slate-700">
                 <button
                     onClick={handlePrevMonth}
-                    className="bg-blue-500 px-4 py-2 rounded"
+                    className="bg-indigo-600  hover:bg-indigo-500 px-4 py-2 rounded cursor-pointer"
                 >
                     Prev
                 </button>
@@ -79,7 +70,7 @@ const Calendar = () => {
                 </h2>
                 <button
                     onClick={handleNextMonth}
-                    className="bg-blue-500 px-4 py-2 rounded"
+                    className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded cursor-pointer"
                 >
                     Next
                 </button>
@@ -100,8 +91,8 @@ const Calendar = () => {
                         <button
                             key={day}
                             onClick={() => handleDateClick(day)}
-                            className={`p-2 border rounded ${selectedDate === dateKey ? "bg-blue-500 text-white" : ""
-                                } ${isToday(day) ? "ring-2 ring-white " : ""}`}
+                            className={`p-2 border rounded cursor-pointer ${selectedDate === dateKey ? "bg-indigo-600 text-black" : ""
+                                } ${isToday(day) ? "ring-2 ring-indigo-600" : ""}`}
                         >
                             {day}
                         </button>
@@ -114,7 +105,7 @@ const Calendar = () => {
                     <h2 className="text-lg font-semibold mb-2">Events for {selectedDate}</h2>
                     <ul className="mb-4">
                         {(events[selectedDate] || []).map((event, index) => (
-                            <li key={index} className="bg-gray-100 p-2 rounded mb-2">
+                            <li key={index} className="bg-slate-700 p-2 rounded mb-2">
                                 {event}
                             </li>
                         ))}
@@ -129,7 +120,7 @@ const Calendar = () => {
                         />
                         <button
                             type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded"
+                            className="bg-indigo-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-indigo-500"
                         >
                             Add
                         </button>

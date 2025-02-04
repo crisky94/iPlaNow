@@ -70,19 +70,19 @@ export default function CreateEventForm() {
   return (
     <div className='min-h-screen flex items-center justify-center pt-20 pb-20'>
       <form
-        className="p-4 rounded-xl bg-transparent border border-[rgba(255,255,255,0.1)] bg-blend-normal shadow-md backdrop-blur-[27px] text-white max-w-3xl mx-auto"
+        className="p-4 rounded-xl bg-slate-800 border border-[rgba(255,255,255,0.1)] bg-blend-normal shadow-md backdrop-blur-[27px] text-white max-w-3xl mx-auto"
         onSubmit={handleSubmit}
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Crear Evento</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Create Event</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
-            { label: 'Nombre del Espacio', name: 'name', type: 'text' },
-            { label: 'Tipo de Espacio', name: 'type', type: 'select', options: ['Salón de Convenciones', 'Auditorio', 'Espacio al aire libre', 'Museo', 'Restaurante', 'Coworking'] },
-            { label: 'Disponibilidad', name: 'availability', type: 'select', options: ['Disponible', 'No disponible'] },
-            { label: 'Estado', name: 'status', type: 'select', options: ['Activo', 'Inactivo'] },
-            { label: 'Hora de Inicio', name: 'start_time', type: 'datetime-local' },
-            { label: 'Hora de Fin', name: 'end_time', type: 'datetime-local' },
+            { label: 'Name of Space', name: 'name', type: 'text' },
+            { label: 'Type of Space', name: 'type', type: 'select', options: ['Salón de Convenciones', 'Auditorio', 'Espacio al aire libre', 'Museo', 'Restaurante', 'Coworking'] },
+            { label: 'Avaliability', name: 'availability', type: 'select', options: ['Disponible', 'No disponible'] },
+            { label: 'State', name: 'status', type: 'select', options: ['Activo', 'Inactivo'] },
+            { label: 'Start Hour', name: 'start_time', type: 'datetime-local' },
+            { label: 'End Hour', name: 'end_time', type: 'datetime-local' },
           ].map((field) => (
             <label key={field.name} className="block">
               <span className="block text-white mb-2">{field.label}</span>
@@ -116,16 +116,16 @@ export default function CreateEventForm() {
         </div>
 
         <div className="mt-4">
-          <label className="block text-white mb-2">Foto</label>
+          <label className="block text-white mb-2">Photo</label>
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+            className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700"
           />
           {preview && (
             <div className="mt-4">
-              <p className="text-sm text-gray-400">Vista previa:</p>
+              <p className="text-sm text-gray-400">Preview:</p>
               <img
                 src={preview}
                 alt="Vista previa"
@@ -138,9 +138,9 @@ export default function CreateEventForm() {
         <div className="flex w-full items-center justify-center mt-6">
           <button
             type="submit"
-            className="w-50 py-2 px-4 bg-blue-600 rounded-md shadow-md hover:bg-blue-500 transition-colors duration-200 text-sm"
+            className="w-50 py-2 px-4 bg-indigo-600 rounded-md shadow-md hover:bg-indigo-500 transition-colors duration-200 text-sm"
           >
-            Crear Evento
+            Create Event
           </button>
         </div>
       </form>
